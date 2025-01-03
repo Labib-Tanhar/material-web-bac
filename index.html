@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAC</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f2f1f8;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #loading-container {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            justify-content: center;
+            z-index: 9999;
+            align-items: center;
+            text-align: center;
+        }
+
+        #loading-photo {
+            height: 50%;
+        }
+
+        .login-container {
+            max-width: 400px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .logo-container h2 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c2a38;
+        }
+
+        .message-text {
+            margin-bottom: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #f2f1f8;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            font-weight: bolder;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 12px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #2c2a38;
+            border-radius: 4px;
+            color: #2c2a38;
+        }
+
+        input:focus::placeholder {
+            color: transparent;
+            outline: none;
+            border: none;
+            border-color: #2c2a38;
+        }
+        
+        button {
+            background-color: #2c2a38;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 10px;
+        }
+
+        .password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #2c2a38;
+}
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-container">
+        <img id="loading-photo" src="logo.png" alt="Loading">
+    </div>
+    <div class="login-container">
+        <div class="logo-container">
+            <h2>Welcome Back</h2>
+        </div>
+        <form id="loginForm" novalidate>
+            <label for="email"></label>
+            <input type="email" id="email" name="email" required placeholder="Email" autocomplete="username">
+
+            <div class="password-container">
+                <label for="password"></label>
+                <input type="password" id="password" name="password" required placeholder="Password" autocomplete="current-password">
+                <span class="password-toggle material-symbols-rounded" onclick="togglePasswordVisibility()">visibility</span>
+            </div>
+            <button type="button" onclick="login()">Login</button>
+        </form>
+        <p id="error-message" class="error-message"></p>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script>
+// Initialize Firebase
+const _0x663892=_0x162b;function _0x162b(_0x45e0d7,_0x1d324c){const _0x45da11=_0x45da();return _0x162b=function(_0x162b29,_0x419ba6){_0x162b29=_0x162b29-0xd0;let _0x4fbdca=_0x45da11[_0x162b29];return _0x4fbdca;},_0x162b(_0x45e0d7,_0x1d324c);}(function(_0x2a4c88,_0x5e06d7){const _0xad6bf2=_0x162b,_0x2fc588=_0x2a4c88();while(!![]){try{const _0x30da3e=-parseInt(_0xad6bf2(0xd4))/0x1+-parseInt(_0xad6bf2(0xd7))/0x2+parseInt(_0xad6bf2(0xdd))/0x3+-parseInt(_0xad6bf2(0xde))/0x4*(parseInt(_0xad6bf2(0xd9))/0x5)+parseInt(_0xad6bf2(0xd0))/0x6+-parseInt(_0xad6bf2(0xdc))/0x7*(-parseInt(_0xad6bf2(0xd3))/0x8)+-parseInt(_0xad6bf2(0xd8))/0x9;if(_0x30da3e===_0x5e06d7)break;else _0x2fc588['push'](_0x2fc588['shift']());}catch(_0xb5b2){_0x2fc588['push'](_0x2fc588['shift']());}}}(_0x45da,0xd164f));function _0x45da(){const _0x317acc=['889qZWTOT','178149zbpwgN','4716hXLAve','8029104UGeYCu','AIzaSyBaaIPOyxTYNZCi4FnRH3EO7o99kOr3wd8','bhuiyanacademiccare.firebaseapp.com','96136frXGdn','588830BCbvUx','G-HQB3M65CF5','966548238156','1811514nCkktM','601632tzsTNM','2140Kzweoc','1:966548238156:web:d23e6ba821f99a467169e9','bhuiyanacademiccare.appspot.com'];_0x45da=function(){return _0x317acc;};return _0x45da();}const firebaseConfig={'apiKey':_0x663892(0xd1),'authDomain':_0x663892(0xd2),'projectId':'bhuiyanacademiccare','storageBucket':_0x663892(0xdb),'messagingSenderId':_0x663892(0xd6),'appId':_0x663892(0xda),'measurementId':_0x663892(0xd5)};
+firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Fetch teacher data from Firestore
+            db.collection('teachers').doc(email).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const teacherData = doc.data();
+                        const storedPassword = teacherData.password;
+
+                        // Check if entered password matches stored password
+                        if (password === storedPassword) {
+                            // Save teacher's email in session storage
+                            sessionStorage.setItem('teacherEmail', email);
+
+                            // Redirect to the student list page
+                            window.location.href = '/Attendance';
+                        } else {
+                            alert('Invalid password');
+                        }
+                    } else {
+                        // Handle the case where teacher data is not found
+                        alert("Teacher data not found!");
+                    }
+                })
+                .catch((error) => {
+                    // Handle errors while fetching teacher data
+                    console.error("Error getting teacher data: ", error);
+                });
+        }
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.querySelector('.password-toggle');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.textContent = 'visibility';
+            }
+        }
+        // Display loading screen
+        document.getElementById('loading-container').style.display = 'flex';
+        setTimeout(function() {
+            document.getElementById('loading-container').style.display = 'none';
+        }, 1800);
+    </script>
+</body>
+</html>
